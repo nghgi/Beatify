@@ -42,6 +42,15 @@ export const removeUser = async (userId) => {
   }
 };
 
+export const updateUserProfile = async (userID, data) => {
+  try {
+    const res = axios.put(`${baseURL}api/users/update/${userID}`, { ...data });
+    return (await res).data;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getAllSongs = async () => {
   try {
     const res = await axios.get(`${baseURL}api/songs/getAll`);

@@ -70,7 +70,7 @@ const DashboardUserCard = ({ data, index }) => {
         />
       </div>
       {/* prettier-ignore */}
-      <p className="text-base text-textColor w-275 min-w-[160px] text-center">{data.name}</p>
+      <p className="text-base text-textColor w-275 min-w-[160px] text-center">{data.username}</p>
       {/* prettier-ignore */}
       <p className="text-base text-textColor w-275 min-w-[160px] text-center">{data.email}</p>
       {/* prettier-ignore */}

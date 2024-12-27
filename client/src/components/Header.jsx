@@ -8,11 +8,12 @@ import { app } from '../config/firebase.config';
 import { motion } from 'framer-motion';
 
 import { FaCrown } from 'react-icons/fa';
+import Modal from './Modal';
 
 const Header = () => {
   const navigate = useNavigate();
   const [{ user }, dispatch] = useStateValue();
-
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
   const logout = () => {
@@ -52,7 +53,7 @@ const Header = () => {
         />
         <div className='flex flex-col'>
           <p className='text-textColor text-lg hover:text-headingColor font-semibold'>
-            {user?.user.name}
+            {user?.user.username}
           </p>
           <p className='flex items-center gap-2 text-xs text-gray-500 font-normal'>
             Premium Member.{' '}
@@ -88,13 +89,25 @@ const Header = () => {
             )}
             <p
               className='text-base text-textColor hover:font-semibold duration-150 transition-all ease-in-out'
-              onClick={logout}
+              onClick={() => setShowLogoutModal(true)}
             >
-              Sign out
+              Log out
             </p>
           </motion.div>
         )}
       </div>
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <Modal
+          title='Confirm Logout'
+          message='Are you sure you want to log out?'
+          onConfirm={() => {
+            logout(); 
+            setShowLogoutModal(false); 
+          }}
+          onCancel={() => setShowLogoutModal(false)}
+        />
+      )}
     </header>
   );
 };

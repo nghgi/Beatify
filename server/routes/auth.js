@@ -8,24 +8,31 @@ router.get('/login', async (req, res) => {
   if (!req.headers.authorization) {
     return res.status(500).send({ message: 'Invalid Token' });
   }
+
   const token = req.headers.authorization.split(' ')[1];
   try {
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (!decodeValue) {
-      return res.status(500).json({ message: 'Unauthorize' });
-    } 
-    // checking user email already exists or not
+      return res.status(500).json({ message: 'Unauthorized' });
+    }
+    // Check if the user exists
     const userExists = await user.findOne({ user_id: decodeValue.user_id });
     if (!userExists) {
       newUserData(decodeValue, req, res);
     } else {
+      // Check the user's status
+      if (userExists.status === 'banned') {
+        return res.status(403).json({ message: 'Your account has been banned. Please contact the admin for futher support.' });
+      }
+      // Update user data if not banned
       updateUserData(decodeValue, req, res);
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: error.message });
   }
 });
+
 
 router.put('/favourites/:userId', async (req, res) => {
   const filter = { _id: req.params.userId };
@@ -114,10 +121,32 @@ router.put('/removeFavourites/:userId', async (req, res) => {
   }
 });
 
+router.put('/update/:updateId', async (req, res) => {
+  const filter = { _id: req.params.updateId };
+  const options = {
+    upsert: true,
+    new: true,
+  };
+  try {
+    const result = await user.findOneAndUpdate(
+      filter,
+      {
+        username: req.body.username,
+        imageURL: req.body.imageURL,
+      },
+      options
+    );
+    res.status(200).send({ user: result });
+  } catch (error) {
+    res.status(400).send({ success: false, msg: error });
+  }
+});
+
 const newUserData = async (decodeValue, req, res) => {
   const newUser = new user({
-    name: decodeValue.name,
+    username: decodeValue.name,
     email: decodeValue.email,
+    status: 'active',
     imageURL: decodeValue.picture,
     user_id: decodeValue.user_id,
     email_verfied: decodeValue.email_verified,
