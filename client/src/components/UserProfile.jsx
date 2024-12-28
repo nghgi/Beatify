@@ -50,6 +50,11 @@ const UserProfile = () => {
     setUserData({ ...userData, [name]: value });
   };
 
+  const validateUserData = () => {
+    const usernameRegex = /^[a-zA-Z0-9_]{3,}$/; // Tên phải dài ít nhất 3 ký tự, chỉ chứa chữ, số và dấu gạch dưới
+    return usernameRegex.test(userData.username);
+  };
+
   // Xử lý sự kiện lưu thông tin
   const handleSave = async () => {
     try {
@@ -68,8 +73,8 @@ const UserProfile = () => {
   };
 
   const deleteImageObject = (URL) => {
-      setIsImageLoading(true);
-      setImageURL(null);
+    setIsImageLoading(true);
+    setImageURL(null);
     const deleteRef = ref(storage, URL);
     deleteObject(deleteRef).then(() => {
       setSetAlert("success");
@@ -145,6 +150,12 @@ const UserProfile = () => {
                 editable ? "border-blue-500" : "border-gray-300"
               } rounded-md`}
             />
+            {!validateUserData() && (
+              <p className="text-red-500 text-sm">
+                Username must be at least 3 characters long and contain only
+                letters, numbers, and underscores.
+              </p>
+            )}
           </div>
 
           {/* Email */}
@@ -171,8 +182,12 @@ const UserProfile = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={handleSave} // Save changes
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700"
+                  type="button"
+                  className={`p-3 rounded-md ${
+                    validateUserData() ? "bg-green-500" : "bg-gray-400"
+                  } text-white`}
+                  disabled={!validateUserData()}
+                  onClick={handleSave}
                 >
                   Save
                 </button>
