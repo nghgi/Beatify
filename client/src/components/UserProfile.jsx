@@ -51,14 +51,14 @@ const UserProfile = () => {
   };
 
   const validateUserData = () => {
-    const usernameRegex = /^[a-zA-Z0-9_]{3,}$/; // Tên phải dài ít nhất 3 ký tự, chỉ chứa chữ, số và dấu gạch dưới
+    const usernameRegex = /^[\p{L}\p{M}\s-]{3,64}$/u // Tên phải từ 3 đến 64 ký tự, cho phép chữ, số, khoảng trắng, gạch ngang, và gạch dưới
     return usernameRegex.test(userData.username);
   };
 
   // Xử lý sự kiện lưu thông tin
   const handleSave = async () => {
     try {
-      const updatedData = { ...userData, imageURL: imageURL };
+      const updatedData = { ...userData, imageURL: imageURL || userData.imageURL, };
       const updatedUser = await updateUserProfile(userData._id, updatedData);
       dispatch({
         type: "SET_USER",
@@ -96,7 +96,7 @@ const UserProfile = () => {
             <img
               src={userData.imageURL}
               alt=""
-              className="w-24 h-24 min-w-[44px] object-cover rounded-full shadow-lg"
+              className="w-24 h-24 min-w-[44px] min-h-[44px] object-cover rounded-full shadow-lg"
             />
             <div
               className={`${
@@ -120,7 +120,7 @@ const UserProfile = () => {
                       <img
                         src={imageURL}
                         alt="uploaded image"
-                        className="w-24 min-w-[44px] object-cover rounded-full shadow-lg"
+                        className="w-24 h-24 min-w-[44px] min-h-[44px] object-cover rounded-full shadow-lg"
                       />
                       <button
                         type="button"
@@ -152,8 +152,7 @@ const UserProfile = () => {
             />
             {!validateUserData() && (
               <p className="text-red-500 text-sm">
-                Username must be at least 3 characters long and contain only
-                letters, numbers, and underscores.
+                Username must be between 3 and 64 characters long and can contain letters, numbers, spaces, underscores, and hyphens.
               </p>
             )}
           </div>

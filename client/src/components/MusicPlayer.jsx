@@ -91,9 +91,9 @@ const MusicPlayer = () => {
         <div className="flex items-start flex-col">
           <p className="text-xl text-headingColor font-semibold">
             {`${
-              allSongs[song]?.name.length > 20
-                ? allSongs[song]?.name.slice(0, 20)
-                : allSongs[song]?.name
+              allSongs[song]?.title.length > 20
+                ? allSongs[song]?.title.slice(0, 20)
+                : allSongs[song]?.title
             }`}{" "}
             <span className="text-base">({allSongs[song]?.album})</span>
           </p>
@@ -203,9 +203,9 @@ export const PlayListCard = () => {
             <div className="flex items-start flex-col">
               <p className="text-lg text-headingColor font-semibold">
                 {`${
-                  music?.name.length > 20
-                    ? music?.name.slice(0, 20)
-                    : music?.name
+                  music?.title.length > 20
+                    ? music?.title.slice(0, 20)
+                    : music?.title
                 }`}{" "}
                 <span className="text-base">({music?.album})</span>
               </p>

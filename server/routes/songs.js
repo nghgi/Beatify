@@ -29,7 +29,7 @@ router.get("/getOne/:getOne", async (req, res) => {
 
 router.post("/save", async (req, res) => {
   const newSong = song({
-    name: req.body.name,
+    title: req.body.title,
     imageURL: req.body.imageURL,
     songUrl: req.body.songUrl,
     album: req.body.album,
@@ -55,7 +55,7 @@ router.put("/update/:updateId", async (req, res) => {
     const result = await song.findOneAndUpdate(
       filter,
       {
-        name: req.body.name,
+        title: req.body.title,
         imageURL: req.body.imageURL,
         songUrl: req.body.songUrl,
         album: req.body.album,

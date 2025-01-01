@@ -44,7 +44,7 @@ export const AlbumCard = ({ data, index }) => {
         alt=""
       />
 
-      <p className="text-base text-textColor">{data.name}</p>
+      <p className="text-base text-textColor">{data.title}</p>
 
       <motion.i
         className="absolute bottom-2 right-2"

@@ -29,7 +29,7 @@ router.get("/getOne/:getOne", async (req, res) => {
 
 router.post("/save", async (req, res) => {
   const newAlbum = album({
-    name: req.body.name,
+    title: req.body.title,
     imageURL: req.body.imageURL,
   });
   try {
@@ -50,7 +50,7 @@ router.put("/update/:updateId", async (req, res) => {
     const result = await album.findOneAndUpdate(
       filter,
       {
-        name: req.body.name,
+        title: req.body.title,
         imageURL: req.body.imageURL,
       },
       options

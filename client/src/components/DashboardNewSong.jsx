@@ -217,7 +217,7 @@ const DashboardNewSong = () => {
       setIsImageLoading(true);
       setIsAudioLoading(true);
       const data = {
-        name: songName,
+        title: songName,
         imageURL: songImageUrl,
         songUrl: audioAsset,
         album: albumFilter,
