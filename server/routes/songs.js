@@ -4,7 +4,10 @@ const router = require("express").Router();
 
 router.get("/getAll", async (req, res) => {
   try {
-    const cursor = await song.find({}).sort({ createdAt: 1 }); // Sử dụng .sort()
+    const cursor = await song.find({})
+    .populate("artistId", "name") 
+    .populate("albumId", "title")
+    .sort({ createdAt: 1 }); // Sử dụng .sort()
     if (cursor && cursor.length > 0) {
       res.status(200).send({ success: true, data: cursor });
     } else {
@@ -18,7 +21,9 @@ router.get("/getAll", async (req, res) => {
 router.get("/getOne/:getOne", async (req, res) => {
   const filter = { _id: req.params.getOne };
 
-  const cursor = await song.findOne(filter);
+  const cursor = await song.findOne(filter)
+  .populate("artistId", "name") 
+  .populate("albumId", "title");
 
   if (cursor) {
     res.status(200).send({ success: true, data: cursor });
@@ -27,23 +32,49 @@ router.get("/getOne/:getOne", async (req, res) => {
   }
 });
 
+// router.post("/save", async (req, res) => {
+//   const newSong = song({
+//     title: req.body.title,
+//     imageUrl: req.body.imageUrl,
+//     songUrl: req.body.songUrl,
+//     album: req.body.album,
+//     artist: req.body.artist,
+//     language: req.body.language,
+//     category: req.body.category,
+//   });
+//   try {
+//     const savedSong = await newSong.save();
+//     res.status(200).send({ song: savedSong });
+//   } catch (error) {
+//     res.status(400).send({ success: false, msg: error });
+//   }
+// });
+
 router.post("/save", async (req, res) => {
-  const newSong = song({
-    title: req.body.title,
-    imageUrl: req.body.imageUrl,
-    songUrl: req.body.songUrl,
-    album: req.body.album,
-    artist: req.body.artist,
-    language: req.body.language,
-    category: req.body.category,
-  });
+  const { title, imageUrl, songUrl, albumId, artistId, language, category } = req.body;
+
+  if (!title || !imageUrl || !songUrl || !artistId || !language || !category) {
+    return res.status(400).send({ success: false, msg: "Required fields are missing" });
+  }
+
   try {
+    const newSong = new song({
+      title,
+      imageUrl,
+      songUrl,
+      albumId, 
+      artistId,
+      language,
+      category,
+    });
+
     const savedSong = await newSong.save();
-    res.status(200).send({ song: savedSong });
+    res.status(200).send({ success: true, song: savedSong });
   } catch (error) {
-    res.status(400).send({ success: false, msg: error });
+    res.status(500).send({ success: false, msg: "Server Error", error });
   }
 });
+
 
 router.put("/update/:updateId", async (req, res) => {
   const filter = { _id: req.params.updateId };
@@ -65,7 +96,7 @@ router.put("/update/:updateId", async (req, res) => {
       },
       options
     );
-    res.status(200).send({ artist: result });
+    res.status(200).send({ song: result, msg: "Song changed successfully" });
   } catch (error) {
     res.status(400).send({ success: false, msg: error });
   }
@@ -76,9 +107,9 @@ router.delete("/delete/:deleteId", async (req, res) => {
 
   const result = await song.deleteOne(filter);
   if (result.deletedCount === 1) {
-    res.status(200).send({ success: true, msg: "Data Deleted" });
+    res.status(200).send({ success: true, msg: "Song deleted" });
   } else {
-    res.status(200).send({ success: false, msg: "Data Not Found" });
+    res.status(200).send({ success: false, msg: "Song not found" });
   }
 });
 

@@ -7,10 +7,12 @@ const albumSchema = mongoose.Schema(
       required: true,
     },
 
-    artistName: {
-      type: String,
-      required: true,
-    },
+    // artistName: {
+    //   type: String,
+    //   required: true,
+    // },
+
+    artistId: { type: mongoose.Schema.Types.ObjectId, ref: "artist", required: true },
 
     imageUrl: {
       type: String,

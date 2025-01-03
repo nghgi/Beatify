@@ -131,3 +131,13 @@ export const deleteAlbumById = async (id) => {
     return null;
   }
 };
+
+export const getAlbumsByArtist = async (artistId) => {
+  try {
+    const res = await axios.get(`${baseURL}api/albums/getByArtist/${artistId}`);
+    return res.data.data; 
+  } catch (error) {
+    return null;
+  }
+};
+

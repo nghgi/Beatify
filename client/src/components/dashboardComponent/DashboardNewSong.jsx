@@ -53,6 +53,21 @@ export const ImageUploader = ({
   const uploadImage = (e) => {
     isLoading(true);
     const imageFile = e.target.files[0];
+    const maxFileSize = isImage ? 10 * 1024 * 1024 : 50 * 1024 * 1024; // 10MB cho ảnh, 50MB cho audio
+    if (imageFile.size > maxFileSize) {
+      setAlert("error");
+      alertMsg(
+        `File size exceeds the limit. Max size is ${
+          isImage ? "10MB" : "50MB"
+        }.`
+      );
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
+      isLoading(false);
+      return;
+    }
+
     const storageRef = ref(
       storage,
       `${isImage ? "Images" : "Audio"}/${Date.now()}-${imageFile.name}`
@@ -152,6 +167,7 @@ const DashboardNewSong = () => {
   const [audioAsset, setAudioAsset] = useState(null);
   const [duration, setDuration] = useState(null);
   const audioRef = useRef();
+  const [artistId, setArtistId] = useState(null);
 
   const [
     {
@@ -208,51 +224,66 @@ const DashboardNewSong = () => {
   };
 
   const saveSong = () => {
-    if (!songimageUrl || !audioAsset || !songName) {
+    if (!songimageUrl || !audioAsset || !songName || !artistId) {
       setSetAlert("error");
       setAlertMsg("Required fields are missing");
       setTimeout(() => {
         setSetAlert(null);
       }, 4000);
-    } else {
+    } 
+    if (songName.length > 120) { 
+      setSetAlert("error");
+      setAlertMsg("Song title exceeds the maximum allowed length of 120 characters");
+      setTimeout(() => {
+        setSetAlert(null);
+      }, 4000);
+      return;
+    }
       setIsImageLoading(true);
       setIsAudioLoading(true);
+  
       const data = {
         title: songName,
         imageUrl: songimageUrl,
         songUrl: audioAsset,
-        album: albumFilter,
-        artist: artistFilter,
+        albumId: albumFilter, 
+        artistId: artistId, 
         language: languageFilter,
         category: filterTerm,
       };
-
+  
       saveNewSong(data).then((res) => {
-        getAllSongs().then((songs) => {
-          dispatch({ type: actionType.SET_ALL_SONGS, allSongs: songs.data });
-        });
+        if (res) {
+          getAllSongs().then((songs) => {
+            dispatch({ type: actionType.SET_ALL_SONGS, allSongs: songs.data });
+          });
+          setSetAlert("success");
+          setAlertMsg("Song saved successfully");
+        } else {
+          // setSetAlert("error");
+          // setAlertMsg("Failed to save song");
+        }
+  
+        setTimeout(() => {
+          setSetAlert(null);
+        }, 4000);
+  
+        setIsImageLoading(false);
+        setIsAudioLoading(false);
+        setSongName("");
+        setSongimageUrl(null);
+        setAudioAsset(null);
+        dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
+        dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
+        dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
+        dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
       });
-      setSetAlert("success");
-      setAlertMsg("Data saved successfully");
-      setTimeout(() => {
-        setSetAlert(null);
-      }, 4000);
-      setIsImageLoading(false);
-      setIsAudioLoading(false);
-      setSongName("");
-      setSongimageUrl(null);
-      setAudioAsset(null);
-      dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
-      dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
-      dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
-      dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
-      setDuration(null);
-    }
   };
+  
 
   return (
     <div className="flex items-center justify-center p-4 border border-gray-300 rounded-md">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-1 gap-4 w-full">
         <div className="flex flex-col items-center justify-center gap-4">
           <input
             type="text"
@@ -263,14 +294,24 @@ const DashboardNewSong = () => {
           />
 
           <div className="flex w-full justify-between flex-wrap items-center gap-4">
-            <SearchComponent type="artist" data={artists} />
+            <SearchComponent
+              type="artist"
+              data={artists}
+              setArtist={setArtistId}
+            />
+            <SearchComponent
+              type="albums"
+              data={allAlbums}
+              artistId={artistId}
+            />
+            {/* <SearchComponent type="artist" data={artists} /> */}
             {/* <FilterButtons filterData={artists} flag={'Artist'} /> */}
-            <FilterButtons filterData={allAlbums} flag={"Albums"} />
+            {/* <FilterButtons filterData={allAlbums} flag={"Albums"} /> */}
             <FilterButtons filterData={filterByLanguage} flag={"Language"} />
             <FilterButtons filterData={filters} flag={"Category"} />
           </div>
 
-          <div className="flex items-center justify-between gap-2 w-full flex-wrap">
+          <div className="flex items-center justify-around gap-2 w-full flex-wrap">
             <div className="bg-card  backdrop-blur-md w-full lg:w-300 h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
               {isImageLoading && <ImageLoader progress={uploadProgress} />}
               {!isImageLoading && (
@@ -365,7 +406,5 @@ const DashboardNewSong = () => {
     </div>
   );
 };
-
-
 
 export default DashboardNewSong;

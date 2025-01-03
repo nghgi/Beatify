@@ -32,7 +32,7 @@ const FilterButtons = ({ filterData, flag }) => {
   };
 
   return (
-    <div className="border border-gray-300 rounded-md px-4 py-1 relative cursor-pointer hover:border-gray-400">
+    <div className="border min-w-40 border-gray-300 rounded-md px-5 py-1 relative cursor-pointer hover:border-gray-400">
       <p
         className="text-base tracking-wide text-textColor flex items-center gap-2 "
         onClick={() => setFilterMenu(!filterMenu)}
@@ -46,7 +46,7 @@ const FilterButtons = ({ filterData, flag }) => {
           </>
         )}
         <IoChevronDown
-          className={`text-base text-textColor duration-150 transition-all ease-in-out ${
+          className={`text-base absolute right-3 text-textColor duration-150 transition-all ease-in-out ${
             filterMenu ? "rotate-180" : "rotate-0"
           }`}
         />
@@ -56,7 +56,7 @@ const FilterButtons = ({ filterData, flag }) => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          className="w-48 z-50 backdrop-blur-sm max-h-44 overflow-y-scroll scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400 py-2 flex flex-col rounded-md shadow-md absolute top-8 left-0"
+          className="w-48 z-50 backdrop-blur-sm max-h-44 overflow-y-scroll scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400 py-2 flex flex-col rounded-md shadow-md absolute top-8 right-0"
         >
           {filterData?.map((data) => (
             <div

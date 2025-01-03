@@ -4,38 +4,75 @@ import { IoSearch } from "react-icons/io5";
 import { actionType } from "../Context/reducer";
 import { useStateValue } from "../Context/StateProvider";
 import { FaTimes } from "react-icons/fa";
+import { getAlbumsByArtist } from "../api";
 
-const SearchComponent = ({ type, data }) => {
+const SearchComponent = ({ type, data, artistId, setArtist }) => {
   const [searchInput, setSearchInput] = useState("");
   const [results, setResults] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState("");
   const [{}, dispatch] = useStateValue();
+
+  // useEffect(() => {
+  //   if (searchInput.trim() !== "") {
+  //     const filteredResults = data.filter((item) => {
+  //       const searchValue = searchInput.toLowerCase();
+  //       return (
+  //         item.name?.toLowerCase().includes(searchValue) ||
+  //         item.title?.toLowerCase().includes(searchValue) ||
+  //         item.artist?.toLowerCase().includes(searchValue) ||
+  //         item.album?.toLowerCase().includes(searchValue)
+  //       );
+  //     });
+  //     setResults(filteredResults);
+  //     setIsDropdownVisible(true);
+  //   } else {
+  //     setResults([]);
+  //     setIsDropdownVisible(false);
+  //   }
+  // }, [searchInput, type, data]);
 
   useEffect(() => {
     if (searchInput.trim() !== "") {
-      const filteredResults = data.filter((item) => {
-        const searchValue = searchInput.toLowerCase();
-        return (
-          item.name?.toLowerCase().includes(searchValue) ||
-          item.title?.toLowerCase().includes(searchValue) ||
-          item.artist?.toLowerCase().includes(searchValue) ||
-          item.album?.toLowerCase().includes(searchValue)
+      if (type === "albums" && artistId) {
+        // Gọi API để lấy danh sách album của artist
+        getAlbumsByArtist(artistId)
+          .then((albums) => {
+            const filteredResults = albums.filter((item) =>
+              item.title.toLowerCase().includes(searchInput.toLowerCase())
+            );
+            setResults(filteredResults);
+          })
+          .catch(console.error);
+      } else if (type === "albums") {
+        // Tìm kiếm toàn bộ album nếu chưa chọn artist
+        const filteredResults = data.filter((item) =>
+          item.title.toLowerCase().includes(searchInput.toLowerCase())
         );
-      });
-      setResults(filteredResults);
+        setResults(filteredResults);
+      } else {
+        // Tìm kiếm artist, song hoặc khác
+        const filteredResults = data.filter((item) => {
+          const searchValue = searchInput.toLowerCase();
+          return (
+            item.name?.toLowerCase().includes(searchValue) ||
+            item.title?.toLowerCase().includes(searchValue)
+          );
+        });
+        setResults(filteredResults);
+      }
       setIsDropdownVisible(true);
     } else {
       setResults([]);
       setIsDropdownVisible(false);
     }
-  }, [searchInput, type, data]);
+  }, [searchInput, type, data, artistId]);
 
-  const updateFilterButton = (name) => {
+  const updateFilterButton = (name, id) => {
     setFilterName(name);
-    setIsDropdownVisible(false);
     if (type === "artist") {
-      dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: name });
+      setArtist(id);
+      dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: id });
     }
 
     if (type === "albums") {
@@ -45,6 +82,7 @@ const SearchComponent = ({ type, data }) => {
     if (type === "song") {
       dispatch({ type: actionType.SET_SONG_FILTER, songFilter: name });
     }
+    setIsDropdownVisible(false);
   };
 
   console.log(data);
@@ -62,7 +100,12 @@ const SearchComponent = ({ type, data }) => {
           onChange={(e) => setSearchInput(e.target.value)}
           onClick={() => setFilterName("")}
         />
-        <button onClick={()=> {setSearchInput(""); setFilterName("")}}>
+        <button
+          onClick={() => {
+            setSearchInput("");
+            setFilterName("");
+          }}
+        >
           <FaTimes className="text-gray-400" />
         </button>
       </div>
@@ -79,11 +122,16 @@ const SearchComponent = ({ type, data }) => {
             results.map((item) => (
               <div
                 key={item._id}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
+                className="p-2 flex gap-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
-                  updateFilterButton(item.name || item.title);
+                  updateFilterButton(item.name || item.title, item._id);
                 }}
               >
+                <img
+                  src={item.imageUrl}
+                  className="w-8 min-w-[32px] h-8 rounded-full object-cover"
+                  alt=""
+                />
                 <p className="text-sm font-semibold">
                   {item.name || item.title}
                 </p>

@@ -1,4 +1,6 @@
 const artist = require("../models/artist");
+const song = require("../models/song");
+const album = require("../models/album");
 
 const router = require("express").Router();
 
@@ -66,14 +68,33 @@ router.put("/update/:updateId", async (req, res) => {
   }
 });
 
-router.delete("/delete/:deleteId", async (req, res) => {
-  const filter = { _id: req.params.deleteId };
+// router.delete("/delete/:deleteId", async (req, res) => {
+//   const filter = { _id: req.params.deleteId };
 
-  const result = await artist.deleteOne(filter);
-  if (result.deletedCount === 1) {
-    res.status(200).send({ success: true, msg: "Data Deleted" });
-  } else {
-    res.status(200).send({ success: false, msg: "Data Not Found" });
+//   const result = await artist.deleteOne(filter);
+//   if (result.deletedCount === 1) {
+//     res.status(200).send({ success: true, msg: "Data Deleted" });
+//   } else {
+//     res.status(200).send({ success: false, msg: "Data Not Found" });
+//   }
+// });
+
+router.delete("/delete/:deleteId", async (req, res) => {
+  const artistId = req.params.deleteId;
+  const filter = { _id: artistId };
+
+  try {
+    await song.deleteMany({ artistId });
+    await album.deleteMany({ artistId });
+    const result = await artist.deleteOne(filter);
+
+    if (result.deletedCount === 1) {
+      res.status(200).send({ success: true, msg: "Artist and related data deleted" });
+    } else {
+      res.status(404).send({ success: false, msg: "Artist not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ success: false, msg: "Server Error", error });
   }
 });
 
