@@ -84,7 +84,7 @@ const MusicPlayer = () => {
         }`}
       >
         <img
-          src={allSongs[song]?.imageURL}
+          src={allSongs[song]?.imageUrl}
           className="w-40 h-20 object-cover rounded-md"
           alt=""
         />
@@ -146,7 +146,7 @@ const MusicPlayer = () => {
             <div className="absolute inset-0 rounded-full bg-red-600 blur-xl animate-pulse"></div>
             <img
               onClick={togglePlayer}
-              src={allSongs[song]?.imageURL}
+              src={allSongs[song]?.imageUrl}
               className="z-50 w-32 h-32 rounded-full object-cover cursor-pointer"
               alt=""
             />

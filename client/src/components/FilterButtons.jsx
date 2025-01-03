@@ -15,9 +15,9 @@ const FilterButtons = ({ filterData, flag }) => {
     setFilterName(name);
     setFilterMenu(false);
 
-    if (flag === "Artist") {
-      dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: name });
-    }
+    // if (flag === 'Artist') {
+    //   dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: name });
+    // }
     if (flag === "Language") {
       dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: name });
     }
@@ -60,21 +60,21 @@ const FilterButtons = ({ filterData, flag }) => {
         >
           {filterData?.map((data) => (
             <div
-              key={data.name}
+              key={data.title}
               className="flex items-center gap-2 px-4 py-1 hover:bg-gray-200"
-              onClick={() => updateFilterButton(data.name)}
+              onClick={() => updateFilterButton(data.title)}
             >
               {(flag === "Artist" || flag === "Albums") && (
                 <img
-                  src={data.imageURL}
+                  src={data.imageUrl}
                   className="w-8 min-w-[32px] h-8 rounded-full object-cover"
                   alt=""
                 />
               )}
               <p className="w-full">
-                {data.name.length > 15
-                  ? `${data.name.slice(0, 14)}...`
-                  : data.name}
+                {data.title.length > 15
+                  ? `${data.title.slice(0, 14)}...`
+                  : data.title}
               </p>
             </div>
           ))}

@@ -31,7 +31,7 @@ router.get("/getOne/:getOne", async (req, res) => {
 router.post("/save", async (req, res) => {
   const newArtist = artist({
     name: req.body.name,
-    imageURL: req.body.imageURL,
+    imageUrl: req.body.imageUrl,
     twitter: req.body.twitter,
     instagram: req.body.instagram,
   });
@@ -54,7 +54,7 @@ router.put("/update/:updateId", async (req, res) => {
       filter,
       {
         name: req.body.name,
-        imageURL: req.body.imageURL,
+        imageUrl: req.body.imageUrl,
         twitter: req.body.twitter,
         instagram: req.body.instagram,
       },

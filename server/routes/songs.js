@@ -30,7 +30,7 @@ router.get("/getOne/:getOne", async (req, res) => {
 router.post("/save", async (req, res) => {
   const newSong = song({
     title: req.body.title,
-    imageURL: req.body.imageURL,
+    imageUrl: req.body.imageUrl,
     songUrl: req.body.songUrl,
     album: req.body.album,
     artist: req.body.artist,
@@ -56,7 +56,7 @@ router.put("/update/:updateId", async (req, res) => {
       filter,
       {
         title: req.body.title,
-        imageURL: req.body.imageURL,
+        imageUrl: req.body.imageUrl,
         songUrl: req.body.songUrl,
         album: req.body.album,
         artist: req.body.artist,

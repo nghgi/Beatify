@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import { useStateValue } from "../Context/StateProvider";
-import { Link } from "react-router-dom";
-import { IoLogoInstagram, IoLogoTwitter } from "react-icons/io5";
+import { useStateValue } from "../../Context/StateProvider";
+import { Link, NavLink } from "react-router-dom";
+import { IoAdd, IoLogoInstagram, IoLogoTwitter } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { getAllArtist, deleteArtistById } from "../api";
-import { actionType } from "../Context/reducer";
-import AlertError from "./AlertError";
-import AlertSuccess from "./AlertSuccess";
+import { getAllArtist, deleteArtistById } from "../../api";
+import { actionType } from "../../Context/reducer";
+import AlertError from "../AlertError";
+import AlertSuccess from "../AlertSuccess";
 
 const DashboardArtist = () => {
   const [{ artists }, dispatch] = useStateValue();
@@ -23,6 +23,12 @@ const DashboardArtist = () => {
 
   return (
     <div className="w-full p-4 flex items-center justify-center flex-col">
+      <NavLink
+        to={"/dashboard/newArtist"}
+        className="flex items-center px-4 py-3 border rounded-md border-gray-300 hover:border-gray-400 hover:shadow-md cursor-pointer"
+      >
+        <IoAdd />
+      </NavLink>
       <div className="relative w-full gap-3  my-4 p-4 py-12 border border-gray-300 rounded-md flex flex-wrap justify-evenly">
         {artists &&
           artists.map((data, index) => (
@@ -37,37 +43,36 @@ const DashboardArtist = () => {
 
 export const ArtistCard = ({ data, index }) => {
   const [isDeleted, setIsDeleted] = useState(false);
-    const [alert, setAlert] = useState(false);
-    const [alertMsg, setAlertMsg] = useState(null);
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
 
-    const [{ artists }, dispatch] = useStateValue();
-    
+  const [{ artists }, dispatch] = useStateValue();
 
-    const deleteObject = (id) => {
-      console.log(id);
-      deleteArtistById(id).then((res) => {
-        // console.log(res.data);
-        if (res.data.success) {
-          setAlert("success");
-          setAlertMsg(res.data.msg);
-          getAllArtist().then((data) => {
-            dispatch({
-              type: actionType.SET_ARTISTS,
-              artists: data.data,
-            });
+  const deleteObject = (id) => {
+    console.log(id);
+    deleteArtistById(id).then((res) => {
+      // console.log(res.data);
+      if (res.data.success) {
+        setAlert("success");
+        setAlertMsg(res.data.msg);
+        getAllArtist().then((data) => {
+          dispatch({
+            type: actionType.SET_ARTISTS,
+            artists: data.data,
           });
-          setTimeout(() => {
-            setAlert(false);
-          }, 4000);
-        } else {
-          setAlert("error");
-          setAlertMsg(res.data.msg);
-          setTimeout(() => {
-            setAlert(false);
-          }, 4000);
-        }
-      });
-    };
+        });
+        setTimeout(() => {
+          setAlert(false);
+        }, 4000);
+      } else {
+        setAlert("error");
+        setAlertMsg(res.data.msg);
+        setTimeout(() => {
+          setAlert(false);
+        }, 4000);
+      }
+    });
+  };
 
   return (
     <motion.div
@@ -77,7 +82,7 @@ export const ArtistCard = ({ data, index }) => {
       className="relative w-44 min-w-180 px-2 py-4 gap-3 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
     >
       <img
-        src={data?.imageURL}
+        src={data?.imageUrl}
         className="w-full h-40 object-cover rounded-md"
         alt=""
       />
@@ -86,12 +91,20 @@ export const ArtistCard = ({ data, index }) => {
       <div className="flex items-center gap-4">
         <a href={data.instagram} target="_blank">
           <motion.i whileTap={{ scale: 0.75 }}>
-            <IoLogoInstagram className="text-gray-500 hover:text-headingColor text-xl" />
+            <IoLogoInstagram
+              className={`text-gray-500 ${
+                data.instagram ? `hover:text-headingColor` : `cursor-default`
+              } text-xl`}
+            />
           </motion.i>
         </a>
         <a href={data.twitter} target="_blank">
           <motion.i whileTap={{ scale: 0.75 }}>
-            <IoLogoTwitter className="text-gray-500 hover:text-headingColor text-xl" />
+            <IoLogoTwitter
+              className={`text-gray-500 ${
+                data.twitter ? `hover:text-headingColor` : `cursor-default`
+              } text-xl`}
+            />
           </motion.i>
         </a>
       </div>
@@ -114,7 +127,7 @@ export const ArtistCard = ({ data, index }) => {
             Are you sure do you want to delete this?
           </p>
           <div className="flex items-center w-full justify-center gap-3">
-          <button
+            <button
               className="text-sm px-4 py-1 rounded-md text-white hover:shadow-md bg-teal-400"
               onClick={() => deleteObject(data._id)}
             >
@@ -129,7 +142,7 @@ export const ArtistCard = ({ data, index }) => {
           </div>
         </motion.div>
       )}
-            {alert && (
+      {alert && (
         <>
           {alert === "success" ? (
             <AlertSuccess msg={alertMsg} />

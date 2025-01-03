@@ -2,10 +2,15 @@ import React, { useEffect } from "react";
 import { FaUsers } from "react-icons/fa";
 import { GiLoveSong, GiMusicalNotes } from "react-icons/gi";
 import { RiUserStarFill } from "react-icons/ri";
-import { getAllAlbums, getAllArtist, getAllSongs, getAllUsers } from "../api";
-import { actionType } from "../Context/reducer";
-import { useStateValue } from "../Context/StateProvider";
-import { bgColors } from "../utils/styles";
+import {
+  getAllAlbums,
+  getAllArtist,
+  getAllSongs,
+  getAllUsers,
+} from "../../api";
+import { actionType } from "../../Context/reducer";
+import { useStateValue } from "../../Context/StateProvider";
+import { bgColors } from "../../utils/styles";
 
 export const DashboardCard = ({ icon, name, count }) => {
   const bg_color = bgColors[parseInt(Math.random() * bgColors.length)];
@@ -58,10 +63,26 @@ const DashBoardHome = () => {
   }, []);
   return (
     <div className="w-full p-6 flex items-center justify-evenly flex-wrap">
-      <DashboardCard icon={<FaUsers className="text-3xl text-textColor" />} name={"Users"} count={allUsers?.length > 0 ? allUsers?.length : 0} />
-      <DashboardCard icon={<GiLoveSong className="text-3xl text-textColor" />} name={"Songs"} count={allSongs?.length > 0 ? allSongs?.length : 0} />
-      <DashboardCard icon={<RiUserStarFill className="text-3xl text-textColor" />} name={"Artist"} count={artists?.length > 0 ? artists?.length : 0} />
-      <DashboardCard icon={<GiMusicalNotes className="text-3xl text-textColor" />} name={"Album"} count={allAlbums?.length > 0 ? allAlbums?.length : 0} />
+      <DashboardCard
+        icon={<FaUsers className="text-3xl text-textColor" />}
+        name={"Users"}
+        count={allUsers?.length > 0 ? allUsers?.length : 0}
+      />
+      <DashboardCard
+        icon={<GiLoveSong className="text-3xl text-textColor" />}
+        name={"Songs"}
+        count={allSongs?.length > 0 ? allSongs?.length : 0}
+      />
+      <DashboardCard
+        icon={<RiUserStarFill className="text-3xl text-textColor" />}
+        name={"Artist"}
+        count={artists?.length > 0 ? artists?.length : 0}
+      />
+      <DashboardCard
+        icon={<GiMusicalNotes className="text-3xl text-textColor" />}
+        name={"Album"}
+        count={allAlbums?.length > 0 ? allAlbums?.length : 0}
+      />
     </div>
   );
 };

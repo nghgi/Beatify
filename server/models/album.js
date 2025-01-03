@@ -7,7 +7,12 @@ const albumSchema = mongoose.Schema(
       required: true,
     },
 
-    imageURL: {
+    artistName: {
+      type: String,
+      required: true,
+    },
+
+    imageUrl: {
       type: String,
       required: true,
     },

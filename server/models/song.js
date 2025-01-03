@@ -7,7 +7,7 @@ const SongSchema = mongoose.Schema(
       required: true,
     },
 
-    imageURL: {
+    imageUrl: {
       type: String,
       required: true,
     },

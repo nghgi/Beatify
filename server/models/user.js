@@ -15,7 +15,7 @@ const UserSchema = mongoose.Schema(
       required: true,
       default: 'active'
     },
-    imageURL: {
+    imageUrl: {
       type: String,
       required: true,
     },

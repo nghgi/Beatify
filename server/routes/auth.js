@@ -132,7 +132,7 @@ router.put('/update/:updateId', async (req, res) => {
       filter,
       {
         username: req.body.username,
-        imageURL: req.body.imageURL,
+        imageUrl: req.body.imageUrl,
       },
       options
     );
@@ -147,7 +147,7 @@ const newUserData = async (decodeValue, req, res) => {
     username: decodeValue.name,
     email: decodeValue.email,
     status: 'active',
-    imageURL: decodeValue.picture,
+    imageUrl: decodeValue.picture,
     user_id: decodeValue.user_id,
     email_verfied: decodeValue.email_verified,
     role: 'member',

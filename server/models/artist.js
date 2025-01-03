@@ -7,7 +7,7 @@ const artistSchema = mongoose.Schema(
       required: true,
     },
 
-    imageURL: {
+    imageUrl: {
       type: String,
       required: true,
     },

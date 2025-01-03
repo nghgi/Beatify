@@ -88,7 +88,7 @@ const Header = () => {
         </div>
         <img
           className="w-12 h-12 min-w-[44px] min-h-[44px] object-cover rounded-full shadow-lg"
-          src={user?.user?.imageURL}
+          src={user?.user?.imageUrl}
           alt=""
           referrerpolicy="no-referrer"
         />

@@ -30,7 +30,8 @@ router.get("/getOne/:getOne", async (req, res) => {
 router.post("/save", async (req, res) => {
   const newAlbum = album({
     title: req.body.title,
-    imageURL: req.body.imageURL,
+    artistName: req.body.artistName,
+    imageUrl: req.body.imageUrl,
   });
   try {
     const savedAlbum = await newAlbum.save();
@@ -51,7 +52,8 @@ router.put("/update/:updateId", async (req, res) => {
       filter,
       {
         title: req.body.title,
-        imageURL: req.body.imageURL,
+        artistName: req.body.artistName,
+        imageUrl: req.body.imageUrl,
       },
       options
     );
