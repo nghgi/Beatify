@@ -76,7 +76,7 @@ const SearchComponent = ({ type, data, artistId, setArtist }) => {
     }
 
     if (type === "albums") {
-      dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: name });
+      dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: id });
     }
 
     if (type === "song") {
@@ -85,7 +85,7 @@ const SearchComponent = ({ type, data, artistId, setArtist }) => {
     setIsDropdownVisible(false);
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="relative w-full max-w-md">

@@ -5,9 +5,9 @@ const router = require("express").Router();
 router.get("/getAll", async (req, res) => {
   try {
     const cursor = await song.find({})
-    .populate("artistId", "name") 
-    .populate("albumId", "title")
-    .sort({ createdAt: 1 }); // Sử dụng .sort()
+      .populate("artistId", "name")
+      .populate("albumId", "title")
+      .sort({ createdAt: 1 }); // Sử dụng .sort()
     if (cursor && cursor.length > 0) {
       res.status(200).send({ success: true, data: cursor });
     } else {
@@ -18,12 +18,25 @@ router.get("/getAll", async (req, res) => {
   }
 });
 
+router.get("/getSongbyId/:albumId", async (req, res) => {
+  try {
+    const songs = await song.find({ albumId: req.params.albumId }).populate("artistId", "name");
+    if (songs && songs.length > 0) {
+      res.status(200).send({ success: true, data: songs });
+    } else {
+      res.status(200).send({ success: true, msg: "No Data Found" });
+    }
+  } catch (error) {
+    res.status(500).send({ success: false, msg: "Server error", error });
+  }
+});
+
 router.get("/getOne/:getOne", async (req, res) => {
   const filter = { _id: req.params.getOne };
 
   const cursor = await song.findOne(filter)
-  .populate("artistId", "name") 
-  .populate("albumId", "title");
+    .populate("artistId", "name")
+    .populate("albumId", "title");
 
   if (cursor) {
     res.status(200).send({ success: true, data: cursor });
@@ -62,7 +75,7 @@ router.post("/save", async (req, res) => {
       title,
       imageUrl,
       songUrl,
-      albumId, 
+      albumId,
       artistId,
       language,
       category,

@@ -95,7 +95,7 @@ const MusicPlayer = () => {
                 ? allSongs[song]?.title.slice(0, 20)
                 : allSongs[song]?.title
             }`}{" "}
-            <span className="text-base">({allSongs[song]?.album})</span>
+            <span className="text-base">({allSongs[song]?.albumId.title})</span>
           </p>
           <p className="text-textColor">
             {allSongs[song]?.artist}{" "}
@@ -207,7 +207,7 @@ export const PlayListCard = () => {
                     ? music?.title.slice(0, 20)
                     : music?.title
                 }`}{" "}
-                <span className="text-base">({music?.album})</span>
+                <span className="text-base">({music?.albumId.title})</span>
               </p>
               <p className="text-textColor">
                 {music?.artist}{" "}

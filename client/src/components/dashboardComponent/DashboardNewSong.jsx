@@ -224,7 +224,7 @@ const DashboardNewSong = () => {
   };
 
   const saveSong = () => {
-    if (!songimageUrl || !audioAsset || !songName || !artistId) {
+    if (!songimageUrl || !audioAsset || !songName || !artistId || !languageFilter ||!filterTerm) {
       setSetAlert("error");
       setAlertMsg("Required fields are missing");
       setTimeout(() => {
@@ -251,6 +251,7 @@ const DashboardNewSong = () => {
         language: languageFilter,
         category: filterTerm,
       };
+      console.log(data)
   
       saveNewSong(data).then((res) => {
         if (res) {
@@ -260,8 +261,8 @@ const DashboardNewSong = () => {
           setSetAlert("success");
           setAlertMsg("Song saved successfully");
         } else {
-          // setSetAlert("error");
-          // setAlertMsg("Failed to save song");
+          setSetAlert("error");
+          setAlertMsg("Failed to save song");
         }
   
         setTimeout(() => {
@@ -273,10 +274,10 @@ const DashboardNewSong = () => {
         setSongName("");
         setSongimageUrl(null);
         setAudioAsset(null);
-        dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
-        dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
-        dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
-        dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
+        // dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
+        // dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
+        // dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
+        // dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
       });
   };
   

@@ -141,3 +141,12 @@ export const getAlbumsByArtist = async (artistId) => {
   }
 };
 
+export const getSongsByAlbumId = async (albumId) => {
+  try {
+    const res = await axios.get(`${baseURL}api/songs/getSongbyId/${albumId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching songs by album:", error);
+    return null;
+  }
+};
