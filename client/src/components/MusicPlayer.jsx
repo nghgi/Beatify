@@ -3,7 +3,7 @@ import { useStateValue } from "../Context/StateProvider";
 import { IoMdClose } from "react-icons/io";
 import { IoArrowRedo, IoArrowUndo, IoMusicalNote } from "react-icons/io5";
 import { motion } from "framer-motion";
-
+import { TbArrowsMinimize } from "react-icons/tb";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { actionType } from "../Context/reducer";
@@ -97,8 +97,8 @@ const MusicPlayer = () => {
             }`}{" "}
             <span className="text-base">({allSongs[song]?.albumId.title})</span>
           </p>
-          <p className="text-textColor">
-            {allSongs[song]?.artist}{" "}
+          <p className="text-textColor ">
+            {allSongs[song]?.artistId.name}{" "}
             <span className="text-sm text-textColor font-semibold">
               ({allSongs[song]?.category})
             </span>
@@ -125,7 +125,7 @@ const MusicPlayer = () => {
             <IoMdClose className="text-textColor hover:text-headingColor text-2xl cursor-pointer" />
           </motion.i>
           <motion.i whileTap={{ scale: 0.8 }} onClick={togglePlayer}>
-            <IoArrowRedo className="text-textColor hover:text-headingColor text-2xl cursor-pointer" />
+            <TbArrowsMinimize  className="text-textColor hover:text-headingColor text-2xl cursor-pointer" />
           </motion.i>
         </div>
       </div>
@@ -209,8 +209,8 @@ export const PlayListCard = () => {
                 }`}{" "}
                 <span className="text-base">({music?.albumId.title})</span>
               </p>
-              <p className="text-textColor">
-                {music?.artist}{" "}
+              <p className="text-textColor bg-red-600">
+                {music?.artistId.name}{" "}
                 <span className="text-sm text-textColor font-semibold">
                   ({music?.category})
                 </span>

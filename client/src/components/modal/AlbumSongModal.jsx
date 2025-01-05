@@ -16,9 +16,6 @@ const AlbumSongsModal = ({ album, songs, closeModal }) => {
         <div className="flex gap-4">
           {songs.length > 0 ? (
             songs.map((song, i) => (
-              //   <li key={song._id} className="flex justify-between items-center">
-              //     <span>{song.title}</span>
-              //   </li>
               <SongCard
                 key={song._id}
                 data={song}

@@ -5,6 +5,7 @@ import { changingUserRole, getAllUsers, removeUser } from "../../api";
 import { actionType } from "../../Context/reducer";
 import { useStateValue } from "../../Context/StateProvider";
 import { MdDelete } from "react-icons/md";
+import { FaBan } from "react-icons/fa";
 
 const DashboardUserCard = ({ data, index }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,7 @@ const DashboardUserCard = ({ data, index }) => {
     });
   };
 
-  const deleteuser = (userId) => {
+  const banUser = (userId) => {
     setIsLoading(true);
     removeUser(userId).then((res) => {
       if (res) {
@@ -59,9 +60,9 @@ const DashboardUserCard = ({ data, index }) => {
         <motion.div
           whileTap={{ scale: 0.75 }}
           className="absolute left-4 w-8 h-8 rounded-md flex items-center justify-center bg-gray-200"
-          onClick={() => deleteuser(data._id)}
+          onClick={() => banUser(data._id)}
         >
-          <MdDelete className="text-xl text-red-400 hover:text-red-500" />
+          <FaBan className="text-xl text-red-400 hover:text-red-500" />
         </motion.div>
       )}
       <div className="w-275 min-w-[160px] flex items-center justify-center">
